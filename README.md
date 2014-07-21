@@ -23,6 +23,7 @@ offer the usable scripts to build ffmpeg lib for android platforms
 
 ##THANKS
 * [roman's blog] http://www.roman10.net/how-to-build-android-applications-based-on-ffmpeg-by-an-example/
+* [Rockplayer Sources build scripts]
 
 ##ABOUT ME
 
