@@ -43,8 +43,6 @@ function build_one
     --enable-filters \
     --enable-avresample \
     --enable-zlib \
-    --enable-zlib \
-    --disable-avfilter \
     --disable-avdevice \
     $ADDITIONAL_CONFIGURE_FLAG
 
