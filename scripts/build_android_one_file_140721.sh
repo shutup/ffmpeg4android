@@ -32,20 +32,17 @@ function build_one
     --disable-shared \
     --enable-static \
     --extra-ldflags="-Wl,-rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib -nostdlib -lc -lm -ldl -llog" \
-    --disable-everything \
-    --enable-demuxer=mov \
-    --enable-demuxer=h264 \
-    --disable-ffplay \
-    --enable-protocol=file \
-    --enable-avformat \
-    --enable-avcodec \
-    --enable-decoder=rawvideo \
-    --enable-decoder=mjpeg \
-    --enable-decoder=h263 \
-    --enable-decoder=mpeg4 \
-    --enable-decoder=h264 \
-    --enable-parser=h264 \
-    --disable-network \
+    --disable-doc \
+    --disable-programs \
+    --enable-decoders \
+    --enable-encoders \
+    --enable-muxers \
+    --enable-demuxers \
+    --enable-parsers \
+    --enable-protocols \
+    --enable-filters \
+    --enable-avresample \
+    --enable-zlib \
     --enable-zlib \
     --disable-avfilter \
     --disable-avdevice \
@@ -55,7 +52,7 @@ make clean
 make
 make install
 $PREBUILT/bin/arm-linux-androideabi-ar d libavcodec/libavcodec.a inverse.o
-$PREBUILT/bin/arm-linux-androideabi-ld -rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib  -soname libffmpeg.so -shared -nostdlib  -z noexecstack -Bsymbolic --whole-archive --no-undefined -o $PREFIX/libffmpeg.so libavcodec/libavcodec.a libavformat/libavformat.a libavutil/libavutil.a libswscale/libswscale.a -lc -lm -lz -ldl -llog   --dynamic-linker=/system/bin/linker $PREBUILT/lib/gcc/arm-linux-androideabi/4.8/libgcc.a
+$PREBUILT/bin/arm-linux-androideabi-ld -rpath-link=$PLATFORM/usr/lib -L$PLATFORM/usr/lib  -soname libffmpeg.so -shared -nostdlib  -z noexecstack -Bsymbolic --whole-archive --no-undefined -o $PREFIX/libffmpeg.so libavcodec/libavcodec.a libavformat/libavformat.a libavutil/libavutil.a libswscale/libswscale.a libswresample/libswresample.a -lc -lm -lz -ldl -llog   --dynamic-linker=/system/bin/linker $PREBUILT/lib/gcc/arm-linux-androideabi/4.8/libgcc.a
 }
 
 #arm v6
