@@ -192,9 +192,10 @@ make clean
     AR="${CROSS_PREFIX}ar" \
     STRIP="${CROSS_PREFIX}strip" \
     NM="${CROSS_PREFIX}nm" \
-    CFLAGS="-O3 $OPTIMIZE_CFLAGS --sysroot=$PLATFORM" \
-    CXXFLAGS="-O3 $OPTIMIZE_CFLAGS --sysroot=$PLATFORM"
+    CFLAGS="-O3 $OPTIMIZE_CFLAGS $EXTRA_PIE_FLAG --sysroot=$PLATFORM" \
+    CXXFLAGS="-O3 $OPTIMIZE_CFLAGS $EXTRA_PIE_FLAG --sysroot=$PLATFORM"
 
+echo "extra_pie_flag:"$EXTRA_PIE_FLAG
 make && make install
 }
 
@@ -242,8 +243,8 @@ cd $SRC_PATH_FFMPEG
 	--enable-libmp3lame \
 	--enable-libx264 \
     --extra-libs="-lgcc -lc -lm -ldl -llog -lopus" \
-    --extra-cflags="-I$NEED_LIBS_PATH/include -O3  $EXTRA_PIE_FLAG  $OPTIMIZE_CFLAGS " \
-    --extra-ldflags="$EXTRA_PIE_FLAG -L$NEED_LIBS_PATH/lib" \
+    --extra-cflags="-I$NEED_LIBS_PATH/include -O3   $OPTIMIZE_CFLAGS $EXTRA_PIE_FLAG" \
+    --extra-ldflags="$OPTIMIZE_CFLAGS $EXTRA_PIE_FLAG -L$NEED_LIBS_PATH/lib" \
     --disable-shared \
     --enable-static \
 	--enable-pic \
@@ -304,15 +305,22 @@ fi
 
 #build_mp3_lame
 if [ $ADD_MP3_LAME -eq 1 ] ; then
-build_mp3_lame
+	if [ $OPEN_PIE -eq 1 ] ; then
+		EXTRA_PIE_FLAG="-pie -fPIE"
+	else
+		EXTRA_PIE_FLAG=""
+	fi
+	build_mp3_lame
+	EXTRA_PIE_FLAG=""
 fi
 
 #build_ffmpeg
 if [ $ADD_FFMPEG -eq 1 ] ; then
-	if [$OPEN_PIE -eq 1 ] ; then
+	if [ $OPEN_PIE -eq 1 ] ; then
 		EXTRA_PIE_FLAG="-pie -fPIE"
 	else
 		EXTRA_PIE_FLAG=""
 	fi
 	build_ffmpeg
+	EXTRA_PIE_FLAG=""
 fi
