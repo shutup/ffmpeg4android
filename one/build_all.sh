@@ -1,13 +1,14 @@
 #set the src full path 
-SRC_PATH_FDK_AAC=/Users/shutup/Documents/player/3rd_libs/mstorsjo-fdk-aac
-SRC_PATH_X264=/Users/shutup/Documents/player/3rd_libs/x264-snapshot-20160409-2245
-SRC_PATH_OGG=/Users/shutup/Documents/player/3rd_libs/libogg-1.3.2
-SRC_PATH_VORBIS=/Users/shutup/Documents/player/3rd_libs/libvorbis-1.3.5
-SRC_PATH_THEORA=/Users/shutup/Documents/player/3rd_libs/libtheora-1.1.1
-SRC_PATH_OPUS=/Users/shutup/Documents/player/3rd_libs/opus-1.1.2
-SRC_PATH_MP3_LAME=/Users/shutup/Documents/player/3rd_libs/lame-3.99.5
-SRC_PATH_VPX=/Users/shutup/Documents/player/3rd_libs/libvpx
-SRC_PATH_FFMPEG=/Users/shutup/Documents/player/ffmpeg-3.0
+SRC_BASE_PATH=/Users/shutup/Documents/player/ffmpeg/3rd_libs
+SRC_PATH_FDK_AAC=$SRC_BASE_PATH/mstorsjo-fdk-aac
+SRC_PATH_X264=$SRC_BASE_PATH/x264-snapshot-20160409-2245
+SRC_PATH_OGG=$SRC_BASE_PATH/libogg-1.3.2
+SRC_PATH_VORBIS=$SRC_BASE_PATH/libvorbis-1.3.5
+SRC_PATH_THEORA=$SRC_BASE_PATH/libtheora-1.1.1
+SRC_PATH_OPUS=$SRC_BASE_PATH/opus-1.1.2
+SRC_PATH_MP3_LAME=$SRC_BASE_PATH/lame-3.99.5
+SRC_PATH_VPX=$SRC_BASE_PATH/libvpx
+SRC_PATH_FFMPEG=/Users/shutup/Documents/player/ffmpeg/ffmpeg-3.0
 
 #check if you need the lib
 ADD_FDK_AAC=1
@@ -19,6 +20,9 @@ ADD_OPUS=1
 ADD_MP3_LAME=1
 ADD_VPX=1
 ADD_FFMPEG=1
+
+#if add PIE
+OPEN_PIE=1
 
 #change to your own ndk path!!!
 NDK=/Users/shutup/Documents/cocos2dx/android-ndk-r10e
@@ -175,7 +179,7 @@ function build_mp3_lame
 {
 cd $SRC_PATH_MP3_LAME
 make uninstall
- make clean
+make clean
 ./configure --prefix=$PREFIX \
 	--with-pic \
 	--build=i686-apple-darwin \
@@ -238,8 +242,8 @@ cd $SRC_PATH_FFMPEG
 	--enable-libmp3lame \
 	--enable-libx264 \
     --extra-libs="-lgcc -lc -lm -ldl -llog -lopus" \
-    --extra-cflags="-I$NEED_LIBS_PATH/include -O3  -pie -fPIE  $OPTIMIZE_CFLAGS " \
-    --extra-ldflags="-pie -fPIE -L$NEED_LIBS_PATH/lib" \
+    --extra-cflags="-I$NEED_LIBS_PATH/include -O3  $EXTRA_PIE_FLAG  $OPTIMIZE_CFLAGS " \
+    --extra-ldflags="$EXTRA_PIE_FLAG -L$NEED_LIBS_PATH/lib" \
     --disable-shared \
     --enable-static \
 	--enable-pic \
@@ -305,5 +309,10 @@ fi
 
 #build_ffmpeg
 if [ $ADD_FFMPEG -eq 1 ] ; then
-build_ffmpeg
+	if [$OPEN_PIE -eq 1 ] ; then
+		EXTRA_PIE_FLAG="-pie -fPIE"
+	else
+		EXTRA_PIE_FLAG=""
+	fi
+	build_ffmpeg
 fi
