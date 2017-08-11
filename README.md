@@ -1,12 +1,19 @@
 ffmpeg-4-android
 ================
 
-share the scripts to build ffmpeg lib for android platform.
+share the scripts to build ffmpeg lib and program for android platform.
 
 ##WHAT IS THIS?
-offer the usable scripts to build ffmpeg lib for android platforms
+offer the usable scripts to build ffmpeg lib and program for android platforms
+
+#Update
+
+1.if you need `libffmpeg.so` then ,refer to [build_ffmpeg_lib.sh](https://github.com/shutup/ffmpeg4android/blob/master/one/build_ffmpeg_lib.sh)
+
+2.if you need `ffmpeg` program ,then refer to [build_ffmpeg_program.sh](https://github.com/shutup/ffmpeg4android/blob/master/one/build_ffmpeg_program.sh) and [ffmpeg_program_with_x264_x265.sh](https://github.com/shutup/ffmpeg4android/blob/master/one/build_ffmpeg_program_with_x264_x265.sh)
 
 ##USAGES
+The Content below may be out of date, just as refrence.
 
 * change the src path and so on,then 
 * `./build_all.sh` or `./build_xxx.sh`
